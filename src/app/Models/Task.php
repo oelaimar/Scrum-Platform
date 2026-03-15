@@ -16,7 +16,7 @@ class Task extends Model
     {
         return $this->belongsTo(Sprint::class);
     }
-    public function student()
+    public function students()
     {
         return $this->belongsToMany(User::class, 'task_user')
             ->withPivot('status', 'solution_link', 'teacher_feedback')

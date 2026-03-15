@@ -20,7 +20,7 @@ class Sprint extends Model
         return [
             'status' => SprintStatus::class,
             'start_date' => 'date',
-            'end_date' => 'date,'
+            'end_date' => 'date' ,
         ];
     }
     public function project()

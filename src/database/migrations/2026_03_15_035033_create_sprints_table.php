@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('name'); // like "sprint 1"
             $table->text('objective')->nullable();
             $table->date('start_date');
+            $table->date('end_date');
             $table->string('status')->default(SprintStatus::PLANNED->value);
             $table->timestamps();
         });

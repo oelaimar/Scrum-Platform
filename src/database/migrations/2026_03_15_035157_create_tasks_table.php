@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('sprint_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->integer('story_point')->default(1);
+            $table->integer('story_points')->default(1);
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            $table->foreignId('teacher_id')->constrained('user')->cascadeOnDelete();
+            $table->foreignId('teacher_id')->constrained('users')->cascadeOnDelete();
 
             $table->string('status')->default(ProjectStatus::DRAFT->value);
 
