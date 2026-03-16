@@ -34,7 +34,14 @@ class User extends Authenticatable
             'status' => UserStatus::class,
         ];
     }
-
+    public function isTeacher(): bool
+    {
+        return $this->role === \App\Enums\UserRole::TEACHER;
+    }
+    public function isStudent(): bool
+    {
+        return $this->role === \App\Enums\UserRole::STUDENT;
+    }
     public function managedProject()
     {
         return $this->hasMany(Project::class, 'teacher_id');

@@ -4,8 +4,10 @@ use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,7 +21,7 @@ Route::middleware('guest')->group(function () {
    Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
@@ -27,10 +29,19 @@ Route::get('/dashboard', function () {
     if ($user->role === UserRole::TEACHER){
         //fetch all student that are pending
         $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();
+        $data['projects'] = $user->managedProject()->get();
     } else {
         //fetch tasks for logging student
         $data['myTasks'] = $user->tasks()->where('status', '!=', TaskStatus::DONE)->get();
     }
-    return view('dashboard', $data);
+    return view('dashboard.index', $data);
 
 })->middleware('auth')->name('dashboard');
+
+Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
+   Route::post('/student/{student}/approve', [TeacherController::class, 'approveStudent'])->name('student.approve');
+   Route::post('/invite/store', [TeacherController::class, 'storeInvitation'])->name('invite.store');
+
+});
+
+Route::get('/register/{token}', [AuthController::class, 'showRegister'])->name('register.invite');
