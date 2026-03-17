@@ -13,7 +13,7 @@ class Sprint extends Model
         'objective',
         'start_date',
         'end_date',
-        'status,'
+        'status',
     ];
     protected function casts(): array
     {

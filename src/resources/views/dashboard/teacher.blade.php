@@ -1,4 +1,9 @@
-<h3 class="text-lg font-medium text-gray-900 mb-4">Teacher Dashboard</h3>
+<div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-medium text-gray-900">Teacher Dashboard</h3>
+    <a href="{{ route('projects.create') }}" class="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-md hover:bg-indigo-700">
+        + Create New Project
+    </a>
+</div>
 
 {{-- Invitation Form --}}
 <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
