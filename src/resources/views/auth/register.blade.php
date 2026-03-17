@@ -8,6 +8,10 @@
 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        <!-- token -->
+        @if(isset($token))
+            <input type="hidden" name="token" value="{{ $token }}">
+        @endif
 
         <!-- Name -->
         <div class="mb-4">
