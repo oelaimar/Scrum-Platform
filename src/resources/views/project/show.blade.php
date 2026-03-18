@@ -33,6 +33,11 @@
                         <h4 class="font-bold text-lg">{{ $sprint->name }}</h4>
                         <p class="text-sm text-gray-500">
                             {{ $sprint->start_date->format('M d, Y') }} - {{ $sprint->end_date->format('M d, Y') }}
+                            @if(auth()->user()->isTeacher())
+                                <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm text-blue-600 hover:underline">
+                                    + Add Task
+                                </a>
+                            @endif
                         </p>
                     </div>
                 @endforeach

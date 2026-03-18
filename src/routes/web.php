@@ -6,6 +6,7 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeacherController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,7 @@ Route::middleware('guest')->group(function () {
 
    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
    Route::post('/register', [AuthController::class, 'register']);
-   
+
    Route::get('/register/{token}', [AuthController::class, 'showRegister'])->name('register.invite');
 });
 
@@ -51,6 +52,9 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/projects/{project}/sprints/create', [SprintController::class, 'create'])->name('sprints.create');
     Route::post('/projects/{project}/sprints', [SprintController::class, 'store'])->name('sprints.store');
+
+    Route::get('/sprints/{sprint}/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+    Route::post('/sprints/{sprint}/tasks', [TaskController::class, 'store'])->name('tasks.store');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
