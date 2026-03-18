@@ -29,16 +29,31 @@
         @if($project->sprints->isNotEmpty())
             <div class="space-y-4">
                 @foreach($project->sprints as $sprint)
-                    <div class="p-4 border rounded-md">
-                        <h4 class="font-bold text-lg">{{ $sprint->name }}</h4>
-                        <p class="text-sm text-gray-500">
-                            {{ $sprint->start_date->format('M d, Y') }} - {{ $sprint->end_date->format('M d, Y') }}
+                    <div class="p-4 border rounded-md mb-4 bg-gray-50">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-lg text-indigo-700">{{ $sprint->name }}</h4>
                             @if(auth()->user()->isTeacher())
-                                <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm text-blue-600 hover:underline">
+                                <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-100">
                                     + Add Task
                                 </a>
                             @endif
-                        </p>
+                        </div>
+
+                        {{-- LIST THE TASKS HERE --}}
+                        @if($sprint->tasks->isNotEmpty())
+                            <ul class="mt-3 space-y-2">
+                                @foreach($sprint->tasks as $task)
+                                    <li class="bg-white border p-3 rounded flex justify-between items-center hover:shadow-sm transition">
+                                        <a href="{{ route('tasks.show', $task->id) }}" class="font-semibold text-gray-800 hover:text-indigo-600">
+                                            {{ $task->title }}
+                                        </a>
+                                        <span class="text-xs text-gray-500">{{ $task->story_points }} Pts</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-xs text-gray-500 mt-2 italic">No tasks created yet.</p>
+                        @endif
                     </div>
                 @endforeach
             </div>

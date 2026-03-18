@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TaskStatus;
+use App\Http\Requests\EvaluateTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskProgressRequest;
 use App\Models\Sprint;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,6 +39,11 @@ class TaskController extends Controller
         if ($user->isStudent() && !$user->tasks()->where('task_id', $task->id)->exists()){
             abort(403, 'You are not assigned to this task.');
         }
+        if ($user->isTeacher()){
+            if ($task->sprint->project->techer_id !== $user->id) abort(403,);
+            $students = $task->students()->get();
+            return view('tasks.teacher_show', compact('task', 'students'));
+        }
         $taskProgress = $user->tasks()->where('task_id', $task->id)->first()->pivot;
         return view('task.show', compact('task', 'taskProgress'));
     }
@@ -49,5 +56,14 @@ class TaskController extends Controller
             'solution_link' => $request->solution_link,
         ]);
         return back()->with('success', 'Task progress updated successfully!');
+    }
+    public function evaluate(EvaluateTaskRequest $request, Task $task, User $student)
+    {
+        if ($task->sprint->project->teacher_id != Auth::id()) abort(4030);
+        $task->students()->updateExistingPivot($student->id, [
+            'status' => $request->status,
+            'teacher_feedback' => $request->teacher_feedback,
+        ]);
+        return back()->with('success', "Feedback saved for {$student->name}.");
     }
 }

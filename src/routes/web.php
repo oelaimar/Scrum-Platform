@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::put('/tasks/{task}/progress', [TaskController::class, 'updateProgress'])->name('tasks.progress.update');
+
+    Route::put('/tasks/{task}/evaluate/{student}', [TaskController::class, 'evaluate'])->name('tasks.evaluate');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
