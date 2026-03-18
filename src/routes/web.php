@@ -55,6 +55,9 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/sprints/{sprint}/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::post('/sprints/{sprint}/tasks', [TaskController::class, 'store'])->name('tasks.store');
+
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::put('/tasks/{task}/progress', [TaskController::class, 'updateProgress'])->name('tasks.progress.update');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){

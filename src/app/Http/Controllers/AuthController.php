@@ -28,9 +28,9 @@ class AuthController extends Controller
                 ->where('email', $email)
                 ->where('is_used', false)
                 ->first();
-        }
-        if(!$invitation){
-            return redirect()->route('register')->with('error', 'this invitation link is invalid or has already been used');
+            if(!$invitation){
+                return redirect()->route('register')->with('error', 'this invitation link is invalid or has already been used');
+            }
         }
         return view('auth.register', compact('token', 'email'));
     }
