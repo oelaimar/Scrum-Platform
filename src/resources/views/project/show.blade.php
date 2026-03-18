@@ -20,9 +20,9 @@
 
             @if(auth()->user()->isTeacher())
                 {{-- We will create this route next --}}
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded text-sm hover:bg-indigo-700">
+                <a href="{{ route('sprints.create', $project->id) }}" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm hover:bg-indigo-700">
                     + Create Sprint
-                </button>
+                </a>
             @endif
         </div>
 

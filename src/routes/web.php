@@ -5,6 +5,7 @@ use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SprintController;
 use App\Http\Controllers\TeacherController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -15,16 +16,19 @@ Route::get('/', function () {
 });
 
 Route::middleware('guest')->group(function () {
-   Route::get('/login', [AuthController::class, 'showLogin']);
-   Route::post('/login', [AuthController::class, 'login'])->name('login');
+   Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+   Route::post('/login', [AuthController::class, 'login']);
 
-   Route::get('/register', [AuthController::class, 'showRegister']);
-   Route::post('/register', [AuthController::class, 'register'])->name('register');
+   Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+   Route::post('/register', [AuthController::class, 'register']);
+   
+   Route::get('/register/{token}', [AuthController::class, 'showRegister'])->name('register.invite');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/dashboard', function () {
+    /** @var \App\Models\User $user */
     $user = Auth::user();
     $data = [];
     if ($user->role === UserRole::TEACHER){
@@ -44,6 +48,9 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
 
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+
+    Route::get('/projects/{project}/sprints/create', [SprintController::class, 'create'])->name('sprints.create');
+    Route::post('/projects/{project}/sprints', [SprintController::class, 'store'])->name('sprints.store');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
@@ -52,4 +59,3 @@ Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function
 
 });
 
-Route::get('/register/{token}', [AuthController::class, 'showRegister'])->name('register.invite');
