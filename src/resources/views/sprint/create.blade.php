@@ -1,68 +1,57 @@
 @extends('layouts.app')
+@section('page-title', 'sprints.create')
 
 @section('content')
-    <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
-        <div class="flex items-center mb-6">
-            <a href="{{ route('projects.show', $project->id) }}" class="text-indigo-600 hover:text-indigo-800 mr-4">&larr; Back to Project</a>
-            <h2 class="text-2xl font-bold text-gray-800">Create New Sprint for: {{ $project->name }}</h2>
+<div class="max-w-2xl mx-auto">
+    <a href="{{ route('projects.show', $project->id) }}" class="inline-flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-indigo-600 transition-colors mb-8">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Project
+    </a>
+
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden">
+        <div class="px-10 py-8 border-b border-gray-50 bg-gray-50/50">
+            <h2 class="text-2xl font-black text-gray-900 tracking-tight">Define New Sprint</h2>
+            <p class="text-xs text-gray-500 font-medium mt-1">Project: <span class="text-indigo-600 font-bold underline">{{ $project->name }}</span></p>
         </div>
-
-        <form action="{{ route('sprints.store', $project->id) }}" method="POST">
-            @csrf
-
-            <!-- Sprint Name -->
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Sprint Name</label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}"
-                       placeholder="e.g., Sprint 1: User Authentication"
-                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror"
-                       required>
-                @error('name')
-                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Sprint Objective -->
-            <div class="mb-6">
-                <label for="objective" class="block text-gray-700 text-sm font-bold mb-2">Sprint Objective</label>
-                <textarea id="objective" name="objective" rows="4"
-                          placeholder="What is the main goal for this period?"
-                          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('objective') border-red-500 @enderror"
-                          required>{{ old('objective') }}</textarea>
-                @error('objective')
-                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Dates -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="p-10">
+            <form action="{{ route('sprints.store', $project->id) }}" method="POST" class="space-y-8">
+                @csrf
                 <div>
-                    <label for="start_date" class="block text-gray-700 text-sm font-bold mb-2">Start Date</label>
-                    <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}"
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('start_date') border-red-500 @enderror"
-                           required>
-                    @error('start_date')
-                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Sprint Name</label>
+                    <input type="text" name="name" value="{{ old('name') }}" required
+                           placeholder="e.g., Sprint 1: Deployment & CI/CD"
+                           class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none">
+                    @error('name') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label for="end_date" class="block text-gray-700 text-sm font-bold mb-2">End Date</label>
-                    <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}"
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('end_date') border-red-500 @enderror"
-                           required>
-                    @error('end_date')
-                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Main Objective</label>
+                    <textarea name="objective" rows="3" required
+                              placeholder="What is the primary goal for this iteration?"
+                              class="w-full bg-gray-50 border border-gray-100 rounded-3xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none leading-relaxed">{{ old('objective') }}</textarea>
+                    @error('objective') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
                 </div>
-            </div>
-
-            <div class="flex items-center justify-end">
-                <a href="{{ route('projects.show', $project->id) }}" class="text-gray-600 mr-4">Cancel</a>
-                <button type="submit"
-                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Save Sprint
-                </button>
-            </div>
-        </form>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Start Date</label>
+                        <input type="date" name="start_date" value="{{ old('start_date') }}" required
+                               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none">
+                        @error('start_date') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">End Date</label>
+                        <input type="date" name="end_date" value="{{ old('end_date') }}" required
+                               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none">
+                        @error('end_date') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-4 pt-4">
+                    <a href="{{ route('projects.show', $project->id) }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 px-6 py-4">Discard</a>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 px-10 rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-95 uppercase tracking-widest text-[10px]">
+                        Save Sprint
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 @endsection

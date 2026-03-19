@@ -1,44 +1,40 @@
 @extends('layouts.auth')
+@section('auth-title', 'Login')
 
 @section('content')
-    <div class="mb-4 text-center">
-        <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
-        <p class="text-sm text-gray-600">Login to your Scrum account</p>
+<form method="POST" action="{{ route('login.store') }}" class="space-y-6">
+    @csrf
+    <div>
+        <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Email Address</label>
+        <div class="relative">
+            <input type="email" name="email" id="email" required value="{{ old('email') }}" autofocus
+                   class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3.5 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                   placeholder="name@example.com">
+        </div>
+        @error('email') <p class="text-xs text-red-500 mt-1.5 ml-1 font-medium">{{ $message }}</p> @enderror
     </div>
 
-    <!-- Session Status (Success messages) -->
-    @if (session('success'))
-        <div class="mb-4 font-medium text-sm text-green-600 bg-green-100 p-2 rounded">
-            {{ session('success') }}
+    <div>
+        <div class="flex items-center justify-between mb-1.5 ml-1">
+            <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Password</label>
+            <a href="#" class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors">Forgot?</a>
         </div>
-    @endif
+        <input type="password" name="password" id="password" required
+               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3.5 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+               placeholder="••••••••">
+    </div>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <div class="flex items-center gap-2 px-1">
+        <input type="checkbox" name="remember" id="remember" class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+        <label for="remember" class="text-xs font-bold text-gray-500 uppercase tracking-widest">Remember Me</label>
+    </div>
 
-        <!-- Email Address -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
-            <input id="email" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="email" name="email" value="{{ old('email') }}" required autofocus />
-            @error('email')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] uppercase tracking-widest text-xs">
+        Sign In
+    </button>
+</form>
 
-        <!-- Password -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="password">Password</label>
-            <input id="password" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="password" name="password" required />
-        </div>
-
-        <div class="flex items-center justify-between mt-4">
-            <a class="text-sm text-gray-600 hover:text-gray-900 underline" href="{{ route('register') }}">
-                Don't have an account?
-            </a>
-            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                Log in
-            </button>
-        </div>
-    </form>
+<div class="text-center mt-8">
+    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">New here? <a href="{{ route('register') }}" class="text-indigo-500 hover:text-indigo-600 transition-colors">Create Account</a></p>
+</div>
 @endsection
-

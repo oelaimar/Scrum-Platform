@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStandupRequest;
 use App\Models\Sprint;
+use App\Models\Standup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

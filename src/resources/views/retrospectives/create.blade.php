@@ -1,38 +1,34 @@
 @extends('layouts.app')
+@section('page-title', 'retrospectives.create')
 
 @section('content')
-    <div class="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
-        <div class="mb-6 border-b pb-4">
-            <h2 class="text-2xl font-bold text-gray-800">Sprint Retrospective: {{ $sprint->name }}</h2>
-            <p class="text-gray-600 mt-1">The sprint is over! Take a moment to reflect on your work so we can improve next time.</p>
+<div class="max-w-2xl mx-auto">
+    <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-indigo-600 transition-colors mb-8">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Dashboard
+    </a>
+
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden">
+        <div class="px-10 py-8 border-b border-gray-50 bg-gray-50/50">
+            <h2 class="text-2xl font-black text-gray-900 tracking-tight leading-tight mb-1">Sprint Retrospective</h2>
+            <p class="text-xs text-gray-500 font-medium">Reflection: <span class="text-indigo-600 font-black underline">{{ $sprint->name }}</span></p>
         </div>
-
-        <form action="{{ route('retrospectives.store', $sprint->id) }}" method="POST" class="space-y-6">
-            @csrf
-
-            <div>
-                <label for="positives" class="block text-gray-800 font-bold mb-2">🟢 What went well? (Positives)</label>
-                <textarea id="positives" name="positives" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 @error('positives') border-red-500 @enderror" placeholder="e.g., I learned Laravel routing quickly, teamwork was great..." required>{{ old('positives') }}</textarea>
-                @error('positives') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
-                <label for="difficulties" class="block text-gray-800 font-bold mb-2">🔴 What were the difficulties? (Challenges)</label>
-                <textarea id="difficulties" name="difficulties" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500 @error('difficulties') border-red-500 @enderror" placeholder="e.g., I struggled with the database relationships..." required>{{ old('difficulties') }}</textarea>
-                @error('difficulties') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
-                <label for="improvements" class="block text-gray-800 font-bold mb-2">🔵 How can we improve? (Action Items)</label>
-                <textarea id="improvements" name="improvements" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('improvements') border-red-500 @enderror" placeholder="e.g., We should have daily standups earlier in the day..." required>{{ old('improvements') }}</textarea>
-                @error('improvements') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="flex justify-end pt-4">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded shadow">
-                    Submit Retrospective
-                </button>
-            </div>
-        </form>
+        <div class="p-10">
+            <form action="{{ route('retrospectives.store', $sprint->id) }}" method="POST" class="space-y-8">
+                @csrf
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Team Dynamics (What went well?)</label>
+                    <textarea name="content" rows="6" required
+                              placeholder="Discuss collaboration, processes, and tools that were effective..."
+                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed"></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-95 uppercase tracking-widest text-[10px]">
+                        Publish Reflection
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 @endsection

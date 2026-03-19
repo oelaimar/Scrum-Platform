@@ -1,52 +1,67 @@
 @extends('layouts.auth')
+@section('auth-title', 'Register')
 
 @section('content')
-    <div class="mb-4 text-center">
-        <h2 class="text-2xl font-bold text-gray-800">Create Account</h2>
-        <p class="text-sm text-gray-600">Join your classroom project</p>
+@php
+    $inviteToken = request()->query('token');
+    $invitation = $inviteToken ? \App\Models\Invitation::where('token', $inviteToken)->where('status', 'pending')->first() : null;
+@endphp
+
+<div class="mb-6">
+    @if($invitation)
+        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-100 mb-6">
+            <p class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Invitation Active</p>
+            <p class="text-xs text-teal-800 font-medium">Joining project: <span class="font-bold underline">{{ $invitation->project->name }}</span></p>
+        </div>
+    @endif
+</div>
+
+<form method="POST" action="{{ route('register.store') }}" class="space-y-5">
+    @csrf
+    @if($inviteToken)
+        <input type="hidden" name="token" value="{{ $inviteToken }}">
+    @endif
+
+    <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Full Name</label>
+        <input type="text" name="name" required value="{{ old('name') }}"
+               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+               placeholder="John Doe">
+        @error('name') <p class="text-xs text-red-500 mt-1.5 ml-1">{{ $message }}</p> @enderror
     </div>
 
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-        <!-- token -->
-        @if(isset($token))
-            <input type="hidden" name="token" value="{{ $token }}">
-        @endif
+    <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Email Address</label>
+        <input type="email" name="email" required value="{{ $invitation ? $invitation->email : old('email') }}" {{ $invitation ? 'readonly' : '' }}
+               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none {{ $invitation ? 'opacity-50 cursor-not-allowed' : '' }}"
+               placeholder="name@example.com">
+        @error('email') <p class="text-xs text-red-500 mt-1.5 ml-1">{{ $message }}</p> @enderror
+    </div>
 
-        <!-- Name -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="name">Full Name</label>
-            <input id="name" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="text" name="name" value="{{ old('name') }}" required autofocus />
-            @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Password</label>
+            <input type="password" name="password" required
+                   class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                   placeholder="••••••••">
         </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Confirm</label>
+            <input type="password" name="password_confirmation" required
+                   class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                   placeholder="••••••••">
+        </div>
+    </div>
+    @error('password') <p class="text-xs text-red-500 ml-1">{{ $message }}</p> @enderror
 
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
-            <input id="email" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="email" name="email" value="{{ old('email') }}" required />
-            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
+    <div class="pt-2">
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] uppercase tracking-widest text-xs">
+            Create Account
+        </button>
+    </div>
+</form>
 
-        <!-- Password -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="password">Password</label>
-            <input id="password" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="password" name="password" required />
-            @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mb-4">
-            <label class="block font-medium text-sm text-gray-700" for="password_confirmation">Confirm Password</label>
-            <input id="password_confirmation" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" type="password" name="password_confirmation" required />
-        </div>
-
-        <div class="flex items-center justify-between mt-4">
-            <a class="text-sm text-gray-600 hover:text-gray-900 underline" href="{{ route('login') }}">
-                Already registered?
-            </a>
-            <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                Register
-            </button>
-        </div>
-    </form>
+<div class="text-center mt-8">
+    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Already a member? <a href="{{ route('login') }}" class="text-indigo-500 hover:text-indigo-600 transition-colors">Sign In</a></p>
+</div>
 @endsection
