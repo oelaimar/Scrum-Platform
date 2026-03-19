@@ -5,6 +5,7 @@ use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RetrospectiveController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\StandupController;
 use App\Http\Controllers\TaskController;
@@ -66,6 +67,12 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/sprints/{sprint}/standups', [StandupController::class, 'store'])->name('standups.store');
 
     Route::get('/sprints/{sprint}/standups', [StandupController::class, 'index'])->name('standups.index');
+
+    Route::patch('/sprints/{sprint}/complete', [SprintController::class, 'complete'])->name('sprints.complete');
+
+    Route::get('/sprints/{sprint}/retrospective/create', [RetrospectiveController::class, 'create'])->name('retrospectives.create');
+    Route::post('/sprints/{sprint}/retrospective', [RetrospectiveController::class, 'store'])->name('retrospectives.store');
+    Route::get('/sprints/{sprint}/retrospectives', [RetrospectiveController::class, 'index'])->name('retrospectives.index');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){

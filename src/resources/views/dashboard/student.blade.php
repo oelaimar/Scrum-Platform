@@ -36,6 +36,31 @@
                 </li>
             @endforeach
         </ul>
+        @php
+            // Find a recently completed sprint where the student HAS NOT submitted a retrospective yet
+            $completedSprintNeedsRetro = Auth::user()->projects()->first()
+                ?->sprints()
+                ->where('status', \App\Enums\SprintStatus::COMPLETED)
+                ->whereDoesntHave('retrospectives', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })
+                ->first();
+        @endphp
+
+        @if($completedSprintNeedsRetro)
+            <div class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 shadow rounded-r-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-yellow-800">Sprint Completed!</h4>
+                        <p class="text-sm text-yellow-700">"{{ $completedSprintNeedsRetro->name }}" has ended. Please submit your retrospective.</p>
+                    </div>
+                    <a href="{{ route('retrospectives.create', $completedSprintNeedsRetro->id) }}" class="px-4 py-2 bg-yellow-500 text-white text-sm font-bold rounded shadow hover:bg-yellow-600">
+                        Start Retrospective
+                    </a>
+                </div>
+            </div>
+        @endif
+
     @else
         <p class="text-sm text-gray-500 border p-4 rounded bg-gray-50">You have no tasks assigned to you right now.</p>
     @endif

@@ -62,8 +62,41 @@
                     </div>
                 @endforeach
             </div>
+            @if($sprint->status === \App\Enums\SprintStatus::ACTIVE && auth()->user()->isTeacher())
+                <form action="{{ route('sprints.complete', $sprint) }}" method="POST">
+                    @csrf
+                    <button class="bg-red-600 text-white px-3 py-1 rounded text-xs">Close Sprint</button>
+                </form>
+            @endif
         @else
             <p class="text-gray-500 text-sm">No sprints have been created for this project yet.</p>
         @endif
+        <div class="flex justify-between items-center mb-2">
+            <h4 class="font-bold text-lg text-indigo-700">
+                {{ $sprint->name }}
+                <span class="text-xs ml-2 px-2 py-1 rounded {{ $sprint->status === \App\Enums\SprintStatus::ACTIVE->value ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800' }}">
+            {{ $sprint->status }}
+        </span>
+            </h4>
+
+            @if(auth()->user()->isTeacher())
+                <div class="flex space-x-2 items-center">
+                    @if($sprint->status === \App\Enums\SprintStatus::ACTIVE->value)
+                        <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-100">+ Add Task</a>
+                        <a href="{{ route('standups.index', $sprint->id) }}" class="text-sm bg-blue-50 border border-blue-300 text-blue-700 px-3 py-1 rounded hover:bg-blue-100">Stand-ups</a>
+
+                        {{-- Form to Complete Sprint --}}
+                        <form action="{{ route('sprints.complete', $sprint->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to close this sprint?');">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Close Sprint</button>
+                        </form>
+                    @elseif($sprint->status === \App\Enums\SprintStatus::COMPLETED->value)
+                        <a href="{{ route('retrospectives.index', $sprint->id) }}" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">View Retrospectives</a>
+                    @endif
+                </div>
+            @endif
+        </div>
+
     </div>
 @endsection

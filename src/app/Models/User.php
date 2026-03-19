@@ -36,11 +36,11 @@ class User extends Authenticatable
     }
     public function isTeacher(): bool
     {
-        return $this->role === \App\Enums\UserRole::TEACHER;
+        return $this->role === UserRole::TEACHER;
     }
     public function isStudent(): bool
     {
-        return $this->role === \App\Enums\UserRole::STUDENT;
+        return $this->role === UserRole::STUDENT;
     }
     public function managedProject()
     {
