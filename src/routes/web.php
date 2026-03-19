@@ -6,6 +6,7 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\StandupController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeacherController;
 use App\Models\User;
@@ -60,6 +61,11 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/tasks/{task}/progress', [TaskController::class, 'updateProgress'])->name('tasks.progress.update');
 
     Route::put('/tasks/{task}/evaluate/{student}', [TaskController::class, 'evaluate'])->name('tasks.evaluate');
+
+    Route::get('/sprints/{sprint}/standups/create', [StandupController::class, 'create'])->name('standups.create');
+    Route::post('/sprints/{sprint}/standups', [StandupController::class, 'store'])->name('standups.store');
+
+    Route::get('/sprints/{sprint}/standups', [StandupController::class, 'index'])->name('standups.index');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){

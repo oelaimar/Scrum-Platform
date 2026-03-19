@@ -33,9 +33,14 @@
                         <div class="flex justify-between items-center mb-2">
                             <h4 class="font-bold text-lg text-indigo-700">{{ $sprint->name }}</h4>
                             @if(auth()->user()->isTeacher())
-                                <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-100">
-                                    + Add Task
-                                </a>
+                                <div class="space-x-2">
+                                    <a href="{{ route('tasks.create', $sprint->id) }}" class="text-sm bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-100">
+                                        + Add Task
+                                    </a>
+                                    <a href="{{ route('standups.index', $sprint->id) }}" class="text-sm bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">
+                                        View Stand-ups
+                                    </a>
+                                </div>
                             @endif
                         </div>
 
