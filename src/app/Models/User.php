@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
+use App\Models\Retrospective;
+use App\Models\Standup;
 
 class User extends Authenticatable
 {
@@ -55,5 +57,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Task::class, 'task_user')
             ->withPivot('status', 'solution_link', 'teacher_feedback')
             ->withTimestamps();
+    }
+    public function standups()
+    {
+        return $this->hasMany(Standup::class);
+    }
+    public function retrospectives()
+    {
+        return $this->hasMany(Retrospective::class);
     }
 }
