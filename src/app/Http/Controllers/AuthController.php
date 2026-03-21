@@ -20,7 +20,7 @@ class AuthController extends Controller
     }
     public function showRegister(Request $request)
     {
-        $token = $request->query('token');
+        $token = $token ?? $request->query('token');
         $email = $request->query('email');
 
         if($token && $email){
@@ -42,7 +42,7 @@ class AuthController extends Controller
                 Auth::logout();
                 return back()->withErrors(['email' => 'your account is pending teacher approval']);
             }
-            return redirect()->intended('dashboard');
+            return redirect()->intended(route('dashboard'));
         }
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
     }
