@@ -37,7 +37,7 @@ Route::get('/dashboard', function () {
     if ($user->role === UserRole::TEACHER){
         //fetch all student that are pending
         $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();
-        $data['projects'] = $user->managedProject()->get();
+        $data['projects'] = $user->managedProjects()->get();
     } elseif ($user->role === UserRole::ADMIN) {
         $data['totalUsers'] = User::count();
         $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();

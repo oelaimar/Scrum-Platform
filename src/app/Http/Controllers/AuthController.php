@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    public function showRegister(Request $request)
+    public function showRegister(Request $request, ?string $token = null)
     {
         $token = $token ?? $request->query('token');
         $email = $request->query('email');

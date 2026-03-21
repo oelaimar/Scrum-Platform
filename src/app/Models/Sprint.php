@@ -31,4 +31,12 @@ class Sprint extends Model
     {
         return $this->hasMany(Task::class);
     }
+    public function retrospectives()
+    {
+        return $this->hasMany(Retrospective::class);
+    }
+    public function standups()
+    {
+        return $this->hasMany(Standup::class);
+    }
 }

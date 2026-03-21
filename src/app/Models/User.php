@@ -44,7 +44,7 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::STUDENT;
     }
-    public function managedProject()
+    public function managedProjects()
     {
         return $this->hasMany(Project::class, 'teacher_id');
     }
