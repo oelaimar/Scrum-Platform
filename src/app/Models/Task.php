@@ -10,7 +10,7 @@ class Task extends Model
         'sprint_id',
         'title',
         'description',
-        'story_point',
+        'story_points',
     ];
     public function sprint()
     {

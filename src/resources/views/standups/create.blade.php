@@ -18,13 +18,13 @@
                 @csrf
                 <div>
                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Yesterday's Progress</label>
-                    <textarea name="yesterday_work" rows="3" required
+                    <textarea name="work_done" rows="3" required
                               placeholder="What did you accomplish since the last stand-up?"
                               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed"></textarea>
                 </div>
                 <div>
                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Today's Focus</label>
-                    <textarea name="today_plan" rows="3" required
+                    <textarea name="work_planned" rows="3" required
                               placeholder="What is your primary goal for today?"
                               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed"></textarea>
                 </div>

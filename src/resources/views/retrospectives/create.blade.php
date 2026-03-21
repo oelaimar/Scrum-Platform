@@ -17,10 +17,25 @@
             <form action="{{ route('retrospectives.store', $sprint->id) }}" method="POST" class="space-y-8">
                 @csrf
                 <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Team Dynamics (What went well?)</label>
-                    <textarea name="content" rows="6" required
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">What went well?</label>
+                    <textarea name="positives" rows="4" required
                               placeholder="Discuss collaboration, processes, and tools that were effective..."
-                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed"></textarea>
+                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed">{{ old('positives') }}</textarea>
+                    @error('positives') <p class="text-xs text-red-500 mt-2 ml-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">What were the difficulties?</label>
+                    <textarea name="difficulties" rows="4" required
+                              placeholder="Describe the challenges and blockers you faced..."
+                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed">{{ old('difficulties') }}</textarea>
+                    @error('difficulties') <p class="text-xs text-red-500 mt-2 ml-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">What can be improved?</label>
+                    <textarea name="improvements" rows="4" required
+                              placeholder="Suggest at least one improvement for the next sprint..."
+                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed">{{ old('improvements') }}</textarea>
+                    @error('improvements') <p class="text-xs text-red-500 mt-2 ml-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-95 uppercase tracking-widest text-[10px]">

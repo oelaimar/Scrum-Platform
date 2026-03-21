@@ -39,11 +39,11 @@
                         <div class="space-y-6">
                             <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100/50">
                                 <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-2 opacity-60">Yesterday</p>
-                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->yesterday_work }}</p>
+                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->work_done }}</p>
                             </div>
                             <div class="bg-indigo-50/30 rounded-2xl p-5 border border-indigo-100/30">
                                 <p class="text-[10px] font-black text-teal-500 uppercase tracking-widest mb-2 opacity-60">Today</p>
-                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->today_plan }}</p>
+                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->work_planned }}</p>
                             </div>
                             @if($standup->blockers)
                                 <div class="bg-orange-50 rounded-2xl p-5 border border-orange-100">

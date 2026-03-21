@@ -40,7 +40,7 @@ class TaskController extends Controller
             abort(403, 'You are not assigned to this task.');
         }
         if ($user->isTeacher()){
-            if ($task->sprint->project->techer_id !== $user->id) abort(403,);
+            if ($task->sprint->project->techer_id !== $user->id) abort(403);
             $students = $task->students()->get();
             return view('tasks.teacher_show', compact('task', 'students'));
         }
@@ -59,7 +59,7 @@ class TaskController extends Controller
     }
     public function evaluate(EvaluateTaskRequest $request, Task $task, User $student)
     {
-        if ($task->sprint->project->teacher_id != Auth::id()) abort(4030);
+        if ($task->sprint->project->teacher_id !== Auth::id()) abort(403);
         $task->students()->updateExistingPivot($student->id, [
             'status' => $request->status,
             'teacher_feedback' => $request->teacher_feedback,

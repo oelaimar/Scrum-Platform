@@ -13,7 +13,7 @@ class UpdateTaskProgressRequest extends FormRequest
     {
         $task = $this->route('task');
         $user = $this->user();
-        return $user->isStudent() && $user->tasks()->with('task_id', $task->id)->exists();
+        return $user->isStudent() && $user->tasks()->where('task_id', $task->id)->exists();
     }
     public function rules(): array
     {

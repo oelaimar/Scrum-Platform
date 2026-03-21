@@ -33,7 +33,21 @@
                     <div class="absolute -left-2 -top-2 w-8 h-8 bg-indigo-50 border border-indigo-100 rounded-full flex items-center justify-center">
                         <svg class="w-4 h-4 text-indigo-400" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C20.1216 16 21.017 16.8954 21.017 18V21C21.017 22.1046 20.1216 23 19.017 23H16.017C14.9124 23 14.017 22.1046 14.017 21ZM14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C20.1216 16 21.017 16.8954 21.017 18V21C21.017 22.1046 20.1216 23 19.017 23H16.017C14.9124 23 14.017 22.1046 14.017 21Z" opacity="0.1"/><path d="M3.58003 18.9151L3.58003 16.0151C3.58003 13.9151 5.28003 12.2151 7.38003 12.2151L10.28 12.2151C10.8323 12.2151 11.28 12.6628 11.28 13.2151C11.28 13.7674 10.8323 14.2151 10.28 14.2151L7.38003 14.2151C6.38592 14.2151 5.58003 15.021 5.58003 16.0151L5.58003 18.9151C5.58003 19.9092 6.38592 20.7151 7.38003 20.7151L10.28 20.7151C10.8323 20.7151 11.28 21.1628 11.28 21.7151C11.28 22.2674 10.8323 22.7151 10.28 22.7151L7.38003 22.7151C5.28003 22.7151 3.58003 21.0151 3.58003 18.9151Z" fill="#6366F1"/></svg>
                     </div>
-                    <p class="text-sm font-medium text-gray-600 leading-relaxed italic">"{{ $retro->content }}"</p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Positives</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->positives }}"</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Difficulties</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->difficulties }}"</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">Improvements</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->improvements }}"</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         @empty

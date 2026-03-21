@@ -14,7 +14,7 @@ class StoreRetrospectiveRequest extends FormRequest
         $sprint = $this->route('sprint');
         return $user->isStudent() &&
             $sprint->status === SprintStatus::COMPLETED &&
-            $user->projects->contains($sprint->project_id);
+            $user->projects->contains('id', $sprint->project_id);
     }
     public function rules(): array
     {
