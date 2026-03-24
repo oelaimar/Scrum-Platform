@@ -15,7 +15,7 @@ class InviteStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'unique:invitations,email,NULL,id,is_used,0'],
             'project_id' => ['required', 'exists:projects,id']
         ];
     }

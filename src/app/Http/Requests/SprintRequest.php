@@ -10,7 +10,9 @@ class SprintRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $project = $this->route('project');
+        return $this->user()->isTeacher() && 
+               ($project->teacher_id === $this->user()->id);
     }
     public function rules(): array
     {

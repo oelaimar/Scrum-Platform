@@ -11,27 +11,53 @@
                     Dashboard
                 </a>
                 <h2 class="text-3xl font-black text-gray-900 tracking-tight mb-2">{{ $project->name }}</h2>
-                <div class="flex items-center gap-6">
-                    <span class="text-[10px] font-black px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full uppercase tracking-widest border border-indigo-100">Status: {{ $project->status }}</span>
-                    <p class="text-sm text-gray-500 font-medium leading-relaxed max-w-2xl">{{ $project->description }}</p>
+                <div class="flex flex-wrap items-center gap-6">
+                    <span class="text-[10px] font-black px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full uppercase tracking-widest border border-indigo-100 whitespace-nowrap">Status: {{ $project->status->value }}</span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        {{ $project->students->count() }} Members
+                    </span>
+                    <p class="text-sm text-gray-500 font-medium leading-relaxed max-w-2xl flex-1">{{ $project->description }}</p>
                 </div>
             </div>
+            @if(auth()->user()->isTeacher())
+            <div class="flex flex-col gap-2">
+                <a href="{{ route('teacher.projects.invites', $project->id) }}" class="text-[10px] font-black text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 rounded-xl uppercase tracking-widest transition-all text-center">Manage Links</a>
+            </div>
+            @endif
         </div>
     </div>
 
-    {{-- Sprints --}}
-    <div class="space-y-6">
-        <div class="flex items-center justify-between px-2">
-            <div>
-                <h3 class="text-lg font-black text-gray-900 tracking-tight">Development Sprints</h3>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{{ $project->sprints->count() }} Sprints Managed</p>
+    {{-- Team & Sprints Grid --}}
+    <div class="grid grid-cols-3 gap-8 mb-12">
+        {{-- Team Sidebar --}}
+        <div class="space-y-6">
+            <h3 class="text-lg font-black text-gray-900 tracking-tight px-2">Project Team</h3>
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-4">
+                @forelse($project->students as $student)
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-xs border border-gray-100">
+                            {{ strtoupper(substr($student->name, 0, 1)) }}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-black text-gray-900 truncate">{{ $student->name }}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{{ $student->email }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center py-4 text-[10px] text-gray-400 font-black uppercase tracking-widest">No members yet</p>
+                @endforelse
             </div>
-            @if(auth()->user()->isTeacher())
-                <a href="{{ route('sprints.create', $project->id) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 px-8 rounded-2xl shadow-lg shadow-indigo-100 transition-all active:scale-95 uppercase tracking-widest text-[10px]">
-                    Create New Sprint
-                </a>
-            @endif
         </div>
+
+        {{-- Sprints List --}}
+        <div class="col-span-2 space-y-6">
+            <div class="flex items-center justify-between px-2">
+                <h3 class="text-lg font-black text-gray-900 tracking-tight">Development Sprints</h3>
+                @if(auth()->user()->isTeacher())
+                    <a href="{{ route('sprints.create', $project->id) }}" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">+ New Sprint</a>
+                @endif
+            </div>
 
         @forelse($project->sprints as $sprint)
             @php
@@ -66,6 +92,12 @@
                                 <form action="{{ route('sprints.complete', $sprint->id) }}" method="POST" onsubmit="return confirm('Archive this sprint?')">
                                     @csrf @method('PATCH')
                                     <button type="submit" class="text-[10px] font-black text-red-500 uppercase tracking-widest px-4 py-2 hover:bg-red-50 rounded-xl transition-all">Archive</button>
+                                </form>
+                            @endif
+                            @if($st === 'planned')
+                                <form action="{{ route('sprints.start', $sprint->id) }}" method="POST" onsubmit="return confirm('Start this sprint now?')">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="text-[10px] font-black text-teal-600 uppercase tracking-widest px-4 py-2 hover:bg-teal-50 rounded-xl transition-all">Start Sprint</button>
                                 </form>
                             @endif
                             @if($st === 'completed')

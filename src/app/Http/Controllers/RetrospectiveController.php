@@ -16,15 +16,20 @@ class RetrospectiveController extends Controller
         if (!Auth::user()->isStudent() || $sprint->status !== \App\Enums\SprintStatus::COMPLETED) {
             abort(403, 'You can only fill a retrospective for a completed sprint.');
         }
-
-        if (Retrospective::where('user_id', Auth::id())->where('sprint_id', $sprint->id)->exists()) {
-            return redirect()->route('dashboard')->with('info', 'You have already submitted a retrospective for this sprint.');
+        if ($sprint->retrospectives()->where('user_id', Auth::id())->exists()) {
+            return redirect()->route('projects.show', $sprint->project_id)
+                ->with('info', 'You have already submitted a retrospective for this sprint.');
         }
 
         return view('retrospectives.create', compact('sprint'));
     }
     public function store(StoreRetrospectiveRequest $request, Sprint $sprint)
     {
+        if ($sprint->retrospectives()->where('user_id', Auth::id())->exists()) {
+            return redirect()->route('projects.show', $sprint->project_id)
+                ->with('error', 'You have already submitted a retrospective for this sprint.');
+        }
+
         Auth::user()->retrospectives()->create([
             'sprint_id' => $sprint->id,
             'positives' => $request->positives,

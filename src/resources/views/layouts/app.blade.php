@@ -97,6 +97,24 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="mb-10 p-6 rounded-2xl bg-red-50 border border-red-100 text-red-700 text-xs font-bold flex items-center gap-4 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-100">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </div>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if(session('info'))
+                <div class="mb-10 p-6 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold flex items-center gap-4 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-100">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    {{ session('info') }}
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </main>

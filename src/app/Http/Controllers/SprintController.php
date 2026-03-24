@@ -28,10 +28,20 @@ class SprintController extends Controller
             'objective' => $request->objective,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'status' => SprintStatus::PLANNED->value,
+            'status' => SprintStatus::PLANNED,
         ]);
         return redirect()->route('projects.show', $project->id)
             ->with('success', 'Sprint created successfully!');
+    }
+    public function start(Sprint $sprint)
+    {
+        if (!Auth::user()->isTeacher() || $sprint->project->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $sprint->update(['status' => SprintStatus::ACTIVE]);
+
+        return back()->with('success', 'Sprint started! Students can now submit their daily stand-ups.');
     }
     public function complete(Sprint $sprint)
     {
@@ -39,7 +49,7 @@ class SprintController extends Controller
             abort(403);
         }
 
-        $sprint->update(['status' => SprintStatus::COMPLETED->value]);
+        $sprint->update(['status' => SprintStatus::COMPLETED]);
 
         return back()->with('success', 'Sprint marked as Completed! Students can now submit their retrospectives.');
     }

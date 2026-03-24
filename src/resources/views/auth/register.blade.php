@@ -4,7 +4,7 @@
 @section('content')
 @php
     $inviteToken = request()->query('token');
-    $invitation = $inviteToken ? \App\Models\Invitation::where('token', $inviteToken)->where('status', 'pending')->first() : null;
+    $invitation = $inviteToken ? \App\Models\Invitation::where('token', $inviteToken)->where('is_used', false)->first() : null;
 @endphp
 
 <div class="mb-6">

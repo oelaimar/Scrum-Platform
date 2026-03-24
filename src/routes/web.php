@@ -43,7 +43,7 @@ Route::get('/dashboard', function () {
         $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();
     } else {
         //fetch tasks for logging student
-        $data['myTasks'] = $user->tasks()->where('status', '!=', TaskStatus::DONE)->get();
+        $data['myTasks'] = $user->tasks()->wherePivot('status', '!=', TaskStatus::DONE->value)->get();
     }
     return view('dashboard.index', $data);
 
@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/sprints/{sprint}/standups', [StandupController::class, 'index'])->name('standups.index');
 
+    Route::patch('/sprints/{sprint}/start', [SprintController::class, 'start'])->name('sprints.start');
     Route::patch('/sprints/{sprint}/complete', [SprintController::class, 'complete'])->name('sprints.complete');
 
     Route::get('/sprints/{sprint}/retrospective/create', [RetrospectiveController::class, 'create'])->name('retrospectives.create');
@@ -80,6 +81,7 @@ Route::middleware(['auth'])->group(function (){
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
    Route::post('/student/{student}/approve', [TeacherController::class, 'approveStudent'])->name('student.approve');
+   Route::get('/projects/{project}/invites', [TeacherController::class, 'showProjectInvites'])->name('projects.invites');
    Route::post('/invite/store', [TeacherController::class, 'storeInvitation'])->name('invite.store');
 
 });

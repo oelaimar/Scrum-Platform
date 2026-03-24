@@ -42,7 +42,7 @@
                 @forelse($myTasks as $task)
                     @php
                         $rawStatus = $task->pivot->status;
-                        $s = ($rawStatus instanceof \UnitEnum) ? $rawStatus->value : (string)($rawStatus ?? 'todo');
+                        $s = ($rawStatus instanceof \UnitEnum) ? $rawStatus->value : (string)$rawStatus;
                         [$bg,$fg,$text] = match($s) { 
                             'in_progress' => ['bg-indigo-50', 'text-indigo-600', 'In Progress'], 
                             'done'        => ['bg-teal-50', 'text-teal-600', 'Done'], 

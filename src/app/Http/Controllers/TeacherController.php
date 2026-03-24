@@ -21,10 +21,23 @@ class TeacherController extends Controller
             abort(403, 'Unauthorized action.');
         }
         if ($student->status === UserStatus::PENDING){
-            $student->status = UserStatus::ACTIVE->value;
+            // Security: Check if student belongs to any of this teacher's projects
+            $isTheirStudent = Auth::user()->managedProjects()
+                ->whereHas('students', function($q) use ($student) {
+                    $q->where('users.id', $student->id);
+                })->exists();
+
+            // Also allow approving students who signed up manually and haven't been assigned to a project yet
+            $isOrphan = $student->projects()->count() === 0;
+
+            if (!$isTheirStudent && !$isOrphan) {
+                return back()->with('error', 'You can only approve students assigned to your projects or new manual signups.');
+            }
+
+            $student->status = UserStatus::ACTIVE;
             $student->save();
 
-            return back()->with('success', 'student ' . $student->name . 'has been approved.');
+            return back()->with('success', 'Student ' . $student->name . ' has been approved.');
         }
         return back()->with('error', 'Student is not pending approval or already active.');
     }

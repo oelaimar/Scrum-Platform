@@ -77,7 +77,10 @@
                 <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed">{{ $project->description }}</p>
                 <div class="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between text-[10px] font-black text-gray-400 uppercase tracking-widest">
                     <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> {{ $project->sprints->count() }} Sprints</span>
-                    <span class="flex items-center gap-1 text-indigo-500">Manage Project <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('teacher.projects.invites', $project->id) }}" class="hover:text-indigo-600 transition-colors">Manage Invites</a>
+                        <span class="text-indigo-500 flex items-center gap-1">Manage Project <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </div>
                 </div>
             </a>
         @empty

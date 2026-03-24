@@ -19,7 +19,7 @@ class TaskController extends Controller
         if($sprint->project->teacher_id !== Auth::id()){
             abort(403);
         }
-        return view('task.create', compact('sprint'));
+        return view('tasks.create', compact('sprint'));
     }
     public function store(StoreTaskRequest $request, Sprint $sprint){
 
@@ -36,16 +36,16 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         $user = Auth::user();
-        if ($user->isStudent() && !$user->tasks()->where('task_id', $task->id)->exists()){
+        if ($user->isStudent() && !$user->tasks()->where('tasks.id', $task->id)->exists()){
             abort(403, 'You are not assigned to this task.');
         }
         if ($user->isTeacher()){
-            if ($task->sprint->project->techer_id !== $user->id) abort(403);
+            if ($task->sprint->project->teacher_id !== $user->id) abort(403);
             $students = $task->students()->get();
             return view('tasks.teacher_show', compact('task', 'students'));
         }
-        $taskProgress = $user->tasks()->where('task_id', $task->id)->first()->pivot;
-        return view('task.show', compact('task', 'taskProgress'));
+        $taskProgress = $user->tasks()->where('tasks.id', $task->id)->first()->pivot;
+        return view('tasks.student_show', compact('task', 'taskProgress'));
     }
     public function updateProgress(UpdateTaskProgressRequest $request, Task $task)
     {

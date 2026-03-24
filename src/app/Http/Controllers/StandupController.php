@@ -15,7 +15,7 @@ class StandupController extends Controller
         if (!Auth::user()->isStudent() || !Auth::user()->projects->contains($sprint->project)) abort(403);
         $existingStandup = Standup::where('user_id', Auth::id())
             ->where('sprint_id', $sprint->id)
-            ->whereDate('created_at', today())
+            ->whereDate('date', today())
             ->first();
         if ($existingStandup){
             return redirect()->route('dashboard')
@@ -27,7 +27,7 @@ class StandupController extends Controller
     {
         $existingStandup = Standup::where('user_id', Auth::id())
             ->where('sprint_id', $sprint->id)
-            ->whereDate('created_at', today())
+            ->whereDate('date', today())
             ->first();
         if ($existingStandup) {
             return back()->with('error', 'You have already submitted your standup for today.')->withInput();

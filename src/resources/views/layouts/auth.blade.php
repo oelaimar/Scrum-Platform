@@ -26,6 +26,27 @@
             <p class="text-gray-500 font-medium">ScrumSchool Management Tool</p>
         </div>
 
+        @if(session('success'))
+            <div class="mb-6 p-4 rounded-2xl bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold flex items-center gap-3">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-6 p-4 rounded-2xl bg-red-50 border border-red-100 text-red-700 text-xs font-bold flex items-center gap-3">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('info'))
+            <div class="mb-6 p-4 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold flex items-center gap-3">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {{ session('info') }}
+            </div>
+        @endif
+
         <div class="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 border border-white p-8 md:p-10">
             @yield('content')
         </div>
