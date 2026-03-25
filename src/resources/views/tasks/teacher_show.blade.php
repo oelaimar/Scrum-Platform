@@ -23,7 +23,7 @@
         <div class="px-10 py-6 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
             <div>
                 <h3 class="text-sm font-black text-gray-900 tracking-tight">Active Submissions</h3>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{{ $students->count() }} Team Member(s)</p>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{{ $progressRecords->count() }} Team Member(s)</p>
             </div>
         </div>
         
@@ -38,22 +38,22 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @foreach($students as $student)
+                    @foreach($progressRecords as $progress)
                         <tr class="group hover:bg-gray-50/30 transition-colors">
                             <td class="px-10 py-6">
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-base shadow-sm">
-                                        {{ strtoupper(substr($student->name, 0, 1)) }}
+                                        {{ strtoupper(substr($progress->user->name, 0, 1)) }}
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-sm font-black text-gray-900 truncate">{{ $student->name }}</p>
-                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{{ $student->email }}</p>
+                                        <p class="text-sm font-black text-gray-900 truncate">{{ $progress->user->name }}</p>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{{ $progress->user->email }}</p>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-10 py-6 text-center">
-                                @if($student->pivot->solution_link)
-                                    <a href="{{ $student->pivot->solution_link }}" target="_blank" 
+                                @if($progress->solution_link)
+                                    <a href="{{ $progress->solution_link }}" target="_blank" 
                                        class="inline-flex items-center gap-1.5 text-[10px] font-black text-indigo-600 uppercase tracking-widest px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-all">
                                         View Pull Request <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                                     </a>
@@ -63,23 +63,22 @@
                             </td>
                             <td class="px-10 py-6 text-center">
                                 @php 
-                                    $rawSt = $student->pivot->status;
-                                    $st = ($rawSt instanceof \UnitEnum) ? $rawSt->value : (string)($rawSt ?? 'todo');
-                                    [$bg,$fg,$text] = match($st) { 
-                                        'done'        => ['bg-teal-50', 'text-teal-600', 'Done'], 
-                                        'in_progress' => ['bg-indigo-50', 'text-indigo-600', 'Active'], 
-                                        default       => ['bg-gray-100', 'text-gray-400', 'Todo'] 
+                                    $status = $progress->status;
+                                    [$bg,$fg,$text] = match($status) { 
+                                        \App\Enums\TaskStatus::DONE        => ['bg-teal-50', 'text-teal-600', 'Done'], 
+                                        \App\Enums\TaskStatus::IN_PROGRESS => ['bg-indigo-50', 'text-indigo-600', 'Active'], 
+                                        default                            => ['bg-gray-100', 'text-gray-400', 'Todo'] 
                                     };
                                 @endphp
                                 <span class="inline-block text-[10px] font-black px-4 py-1.5 {{ $bg }} {{ $fg }} rounded-full uppercase tracking-widest border {{ str_replace('text-', 'border-', $fg) }} border-opacity-20">{{ $text }}</span>
                             </td>
                             <td class="px-10 py-6 min-w-[320px]">
-                                <form action="{{ route('tasks.evaluate', ['task'=>$task->id,'student'=>$student->id]) }}" method="POST" class="space-y-3">
+                                <form action="{{ route('tasks.evaluate', ['task'=>$task->id,'student'=>$progress->user->id]) }}" method="POST" class="space-y-3">
                                     @csrf @method('PUT')
                                     <div class="flex gap-2">
                                         <select name="status" class="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-[10px] font-black uppercase tracking-widest focus:bg-white focus:border-indigo-500 transition-all outline-none appearance-none cursor-pointer">
-                                            @foreach(\App\Enums\TaskStatus::cases() as $status)
-                                                <option value="{{ $status->value }}" {{ $student->pivot->status===$status->value ? 'selected' : '' }}>{{ ucfirst(str_replace('_',' ',$status->value)) }}</option>
+                                            @foreach(\App\Enums\TaskStatus::cases() as $s)
+                                                <option value="{{ $s->value }}" {{ $progress->status === $s ? 'selected' : '' }}>{{ ucfirst(str_replace('_',' ',$s->value)) }}</option>
                                             @endforeach
                                         </select>
                                         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-95 text-[10px] uppercase tracking-widest">
@@ -88,7 +87,7 @@
                                     </div>
                                     <textarea name="teacher_feedback" rows="2" 
                                               placeholder="Provide specific, actionable feedback for this milestone..." 
-                                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-xs font-medium text-gray-600 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed resize-none">{{ $student->pivot->teacher_feedback }}</textarea>
+                                              class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-xs font-medium text-gray-600 focus:bg-white focus:border-indigo-500 transition-all outline-none leading-relaxed resize-none">{{ $progress->teacher_feedback }}</textarea>
                                 </form>
                             </td>
                         </tr>

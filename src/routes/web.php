@@ -24,30 +24,15 @@ Route::middleware('guest')->group(function () {
 
    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
-
-   Route::get('/register/{token}', [AuthController::class, 'showRegister'])->name('register.invite');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/dashboard', function () {
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
-    $data = [];
-    if ($user->role === UserRole::TEACHER){
-        //fetch all student that are pending
-        $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();
-        $data['projects'] = $user->managedProjects()->get();
-    } elseif ($user->role === UserRole::ADMIN) {
-        $data['totalUsers'] = User::count();
-        $data['pendingStudents'] = User::where('status', UserStatus::PENDING)->get();
-    } else {
-        //fetch tasks for logging student
-        $data['myTasks'] = $user->tasks()->wherePivot('status', '!=', TaskStatus::DONE->value)->get();
-    }
-    return view('dashboard.index', $data);
+use App\Http\Controllers\DashboardController;
 
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 Route::middleware(['auth'])->group(function (){
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
@@ -77,12 +62,12 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/sprints/{sprint}/retrospective/create', [RetrospectiveController::class, 'create'])->name('retrospectives.create');
     Route::post('/sprints/{sprint}/retrospective', [RetrospectiveController::class, 'store'])->name('retrospectives.store');
     Route::get('/sprints/{sprint}/retrospectives', [RetrospectiveController::class, 'index'])->name('retrospectives.index');
+
+    Route::post('/projects/{project}/students', [ProjectController::class, 'addStudent'])->name('projects.addStudent');
+    Route::delete('/projects/{project}/students/{student}', [ProjectController::class, 'removeStudent'])->name('projects.removeStudent');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function (){
+   Route::get('/students', [TeacherController::class, 'studentsIndex'])->name('students.index');
    Route::post('/student/{student}/approve', [TeacherController::class, 'approveStudent'])->name('student.approve');
-   Route::get('/projects/{project}/invites', [TeacherController::class, 'showProjectInvites'])->name('projects.invites');
-   Route::post('/invite/store', [TeacherController::class, 'storeInvitation'])->name('invite.store');
-
 });
-

@@ -9,8 +9,8 @@ class Standup extends Model
     protected $fillable = [
         'user_id',
         'sprint_id',
-        'work_done',
-        'work_planned',
+        'did_yesterday',
+        'will_do_today',
         'blockers',
         'date',
     ];

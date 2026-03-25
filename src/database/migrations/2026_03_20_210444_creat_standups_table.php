@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sprint_id')->constrained()->cascadeOnDelete();
-            $table->text('work_done');
-            $table->text('work_planned');
+            $table->text('did_yesterday');
+            $table->text('will_do_today');
             $table->text('blockers')->nullable();
             $table->timestamps();
         });

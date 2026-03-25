@@ -13,7 +13,9 @@ class RetrospectiveController extends Controller
 {
     public function create(Sprint $sprint)
     {
-        if (!Auth::user()->isStudent() || $sprint->status !== \App\Enums\SprintStatus::COMPLETED) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->isStudent() || $sprint->status !== \App\Enums\SprintStatus::COMPLETED) {
             abort(403, 'You can only fill a retrospective for a completed sprint.');
         }
         if ($sprint->retrospectives()->where('user_id', Auth::id())->exists()) {
@@ -30,17 +32,21 @@ class RetrospectiveController extends Controller
                 ->with('error', 'You have already submitted a retrospective for this sprint.');
         }
 
-        Auth::user()->retrospectives()->create([
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->retrospectives()->create([
             'sprint_id' => $sprint->id,
-            'positives' => $request->positives,
-            'difficulties' => $request->difficulties,
-            'improvements' => $request->improvements,
+            'what_went_well' => $request->what_went_well,
+            'what_needs_improvement' => $request->what_needs_improvement,
+            'action_items' => $request->action_items,
         ]);
         return redirect()->route('dashboard')->with('success', 'Retrospective submitted!');
     }
     public function index(Sprint $sprint)
     {
-        if (!Auth::user()->isTeacher() || $sprint->project->teacher_id !== Auth::id()) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->isTeacher() || $sprint->project->teacher_id !== $user->id) {
             abort(403);
         }
 

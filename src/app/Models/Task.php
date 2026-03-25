@@ -22,5 +22,18 @@ class Task extends Model
             ->withPivot('status', 'solution_link', 'teacher_feedback')
             ->withTimestamps();
     }
+
+    public function progress()
+    {
+        return $this->hasMany(TaskProgress::class);
+    }
+
+    public function getOrCreateProgressForStudent(User $student): TaskProgress
+    {
+        return $this->progress()->firstOrCreate(
+            ['user_id' => $student->id],
+            ['status' => \App\Enums\TaskStatus::TODO]
+        );
+    }
 }
 

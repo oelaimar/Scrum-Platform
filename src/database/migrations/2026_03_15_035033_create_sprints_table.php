@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->string('name'); // like "sprint 1"
-            $table->text('objective')->nullable();
+            $table->string('goal')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->string('status')->default(SprintStatus::PLANNED->value);

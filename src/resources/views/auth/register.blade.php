@@ -4,16 +4,10 @@
 @section('content')
 @php
     $inviteToken = request()->query('token');
-    $invitation = $inviteToken ? \App\Models\Invitation::where('token', $inviteToken)->where('is_used', false)->first() : null;
 @endphp
 
 <div class="mb-6">
-    @if($invitation)
-        <div class="p-4 rounded-2xl bg-teal-50 border border-teal-100 mb-6">
-            <p class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Invitation Active</p>
-            <p class="text-xs text-teal-800 font-medium">Joining project: <span class="font-bold underline">{{ $invitation->project->name }}</span></p>
-        </div>
-    @endif
+    {{-- Invitation logic removed --}}
 </div>
 
 <form method="POST" action="{{ route('register.store') }}" class="space-y-5">
@@ -32,8 +26,8 @@
 
     <div>
         <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Email Address</label>
-        <input type="email" name="email" required value="{{ $invitation ? $invitation->email : old('email') }}" {{ $invitation ? 'readonly' : '' }}
-               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none {{ $invitation ? 'opacity-50 cursor-not-allowed' : '' }}"
+        <input type="email" name="email" required value="{{ old('email') }}"
+               class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
                placeholder="name@example.com">
         @error('email') <p class="text-xs text-red-500 mt-1.5 ml-1">{{ $message }}</p> @enderror
     </div>

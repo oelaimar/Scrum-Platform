@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    @forelse($standups->groupBy(fn($s) => $s->created_at->format('Y-m-d')) as $date => $dayStandups)
+    @forelse($standups as $date => $dayStandups)
         <div class="mb-12">
             <div class="flex items-center gap-4 mb-6 px-1">
                 <span class="text-[10px] font-black px-4 py-1.5 bg-gray-100 text-gray-400 rounded-full uppercase tracking-widest border border-gray-200 shadow-sm">{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</span>
@@ -39,11 +39,11 @@
                         <div class="space-y-6">
                             <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100/50">
                                 <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-2 opacity-60">Yesterday</p>
-                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->work_done }}</p>
+                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->did_yesterday }}</p>
                             </div>
                             <div class="bg-indigo-50/30 rounded-2xl p-5 border border-indigo-100/30">
                                 <p class="text-[10px] font-black text-teal-500 uppercase tracking-widest mb-2 opacity-60">Today</p>
-                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->work_planned }}</p>
+                                <p class="text-xs text-gray-600 font-medium leading-relaxed">{{ $standup->will_do_today }}</p>
                             </div>
                             @if($standup->blockers)
                                 <div class="bg-orange-50 rounded-2xl p-5 border border-orange-100">

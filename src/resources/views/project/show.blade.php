@@ -22,7 +22,7 @@
             </div>
             @if(auth()->user()->isTeacher())
             <div class="flex flex-col gap-2">
-                <a href="{{ route('teacher.projects.invites', $project->id) }}" class="text-[10px] font-black text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 rounded-xl uppercase tracking-widest transition-all text-center">Manage Links</a>
+                {{-- Invitation links removed in favor of direct management below --}}
             </div>
             @endif
         </div>
@@ -34,15 +34,38 @@
         <div class="space-y-6">
             <h3 class="text-lg font-black text-gray-900 tracking-tight px-2">Project Team</h3>
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-4">
+                @if(auth()->user()->isTeacher())
+                    <form action="{{ route('projects.addStudent', $project->id) }}" method="POST" class="mb-6 flex gap-2">
+                        @csrf
+                        <select name="student_id" required class="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500/20">
+                            <option value="">Select Student to Add</option>
+                            @foreach($availableStudents as $student)
+                                <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl hover:bg-indigo-700 transition-all">Add</button>
+                    </form>
+                @endif
+
                 @forelse($project->students as $student)
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-xs border border-gray-100">
-                            {{ strtoupper(substr($student->name, 0, 1)) }}
+                    <div class="flex items-center justify-between group/student">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-xs border border-gray-100">
+                                {{ strtoupper(substr($student->name, 0, 1)) }}
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-black text-gray-900 truncate">{{ $student->name }}</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{{ $student->email }}</p>
+                            </div>
                         </div>
-                        <div class="min-w-0">
-                            <p class="text-sm font-black text-gray-900 truncate">{{ $student->name }}</p>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{{ $student->email }}</p>
-                        </div>
+                        @if(auth()->user()->isTeacher())
+                            <form action="{{ route('projects.removeStudent', [$project->id, $student->id]) }}" method="POST" class="opacity-0 group-hover/student:opacity-100 transition-opacity">
+                                @csrf @method('DELETE')
+                                <button type="submit" onclick="return confirm('Remove student from project?')" class="text-red-400 hover:text-red-600">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 @empty
                     <p class="text-center py-4 text-[10px] text-gray-400 font-black uppercase tracking-widest">No members yet</p>
@@ -78,7 +101,10 @@
                         <div>
                             <span class="text-[10px] font-black uppercase tracking-widest {{ $fg }} mb-1 block">{{ $icon }}</span>
                             <h4 class="text-lg font-black text-gray-900 tracking-tight">{{ $sprint->name }}</h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
+                            @if($sprint->goal)
+                                <p class="text-xs text-gray-500 font-medium mt-1 leading-relaxed">{{ $sprint->goal }}</p>
+                            @endif
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">
                                 {{ \Carbon\Carbon::parse($sprint->start_date)->format('M d') }} — {{ \Carbon\Carbon::parse($sprint->end_date)->format('M d, Y') }}
                             </p>
                         </div>

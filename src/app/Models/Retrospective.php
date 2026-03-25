@@ -9,9 +9,9 @@ class Retrospective extends Model
     protected $fillable = [
         'user_id',
         'sprint_id',
-        'positives',
-        'difficulties',
-        'improvements',
+        'what_went_well',
+        'what_needs_improvement',
+        'action_items',
     ];
     public function user()
     {

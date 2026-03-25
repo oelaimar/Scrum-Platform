@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sprint_id')->constrained()->cascadeOnDelete();
-            $table->text('positives');
-            $table->text('difficulties');
-            $table->text('improvements');
+            $table->text('what_went_well');
+            $table->text('what_needs_improvement');
+            $table->text('action_items');
             $table->timestamps();
 
             $table->unique(['user_id', 'sprint_id']);

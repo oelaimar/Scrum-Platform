@@ -31,8 +31,14 @@ class Project extends Model
     {
         return $this->hasMany(Sprint::class);
     }
-    public function invitations()
+
+    public function activeSprint()
     {
-        return $this->hasMany(Invitation::class);
+        return $this->hasOne(Sprint::class)->where('status', \App\Enums\SprintStatus::ACTIVE->value);
+    }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(Task::class, Sprint::class);
     }
 }

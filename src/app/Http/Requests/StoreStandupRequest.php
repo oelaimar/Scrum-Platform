@@ -18,8 +18,8 @@ class StoreStandupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'work_done' => ['required', 'string', 'max:1000'],
-            'work_planned' => ['required', 'string', 'max:1000'],
+            'did_yesterday' => ['required', 'string', 'max:1000'],
+            'will_do_today' => ['required', 'string', 'max:1000'],
             'blockers' => ['nullable', 'string', 'max:1000'],
         ];
     }

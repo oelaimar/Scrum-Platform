@@ -12,7 +12,9 @@ class StandupController extends Controller
 {
     public function create(Sprint $sprint)
     {
-        if (!Auth::user()->isStudent() || !Auth::user()->projects->contains($sprint->project)) abort(403);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->isStudent() || !$user->projects->contains($sprint->project)) abort(403);
         $existingStandup = Standup::where('user_id', Auth::id())
             ->where('sprint_id', $sprint->id)
             ->whereDate('date', today())
@@ -33,10 +35,12 @@ class StandupController extends Controller
             return back()->with('error', 'You have already submitted your standup for today.')->withInput();
         }
 
-        Auth::user()->standups()->create([
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->standups()->create([
             'sprint_id' => $sprint->id,
-            'work_done' => $request->work_done,
-            'work_planned' => $request->work_planned,
+            'did_yesterday' => $request->did_yesterday,
+            'will_do_today' => $request->will_do_today,
             'blockers' => $request->blockers,
             'date' => today(),
         ]);
@@ -45,7 +49,9 @@ class StandupController extends Controller
     }
     public function index(Sprint $sprint)
     {
-        if (!Auth::user()->isTeacher() || $sprint->project->teacher_id !== Auth::id()) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->isTeacher() || $sprint->project->teacher_id !== $user->id) {
             abort(403);
         }
 

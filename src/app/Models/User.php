@@ -66,4 +66,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Retrospective::class);
     }
+    public function taskProgress()
+    {
+        return $this->hasMany(TaskProgress::class);
+    }
 }

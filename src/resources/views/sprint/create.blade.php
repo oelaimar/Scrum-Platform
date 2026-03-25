@@ -24,11 +24,11 @@
                     @error('name') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Main Objective</label>
-                    <textarea name="objective" rows="3" required
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Main Goal</label>
+                    <textarea name="goal" rows="3" required
                               placeholder="What is the primary goal for this iteration?"
-                              class="w-full bg-gray-50 border border-gray-100 rounded-3xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none leading-relaxed">{{ old('objective') }}</textarea>
-                    @error('objective') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
+                              class="w-full bg-gray-50 border border-gray-100 rounded-3xl px-6 py-4 text-sm font-medium text-gray-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none leading-relaxed">{{ old('goal') }}</textarea>
+                    @error('goal') <p class="text-xs text-red-500 mt-2 ml-1 font-medium">{{ $message }}</p> @enderror
                 </div>
                 <div class="grid grid-cols-2 gap-8">
                     <div>

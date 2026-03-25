@@ -19,17 +19,17 @@ class StoreRetrospectiveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'positives' => ['required', 'string'],
-            'difficulties' => ['required', 'string'],
-            'improvements' => ['required', 'string'],
+            'what_went_well' => ['required', 'string'],
+            'what_needs_improvement' => ['required', 'string'],
+            'action_items' => ['required', 'string'],
         ];
     }
     public function messages(): array
     {
         return [
-            'positives.required' => 'Please tell us what went well.',
-            'difficulties.required' => 'Please describe the challenges you faced.',
-            'improvements.required' => 'Please suggest at least one improvement.',
+            'what_went_well.required' => 'Please tell us what went well.',
+            'what_needs_improvement.required' => 'Please describe what needs improvement.',
+            'action_items.required' => 'Please suggest action items.',
         ];
     }
 }

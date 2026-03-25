@@ -33,16 +33,25 @@
             
             @if(auth()->user()->role === \App\Enums\UserRole::TEACHER)
                 <div class="px-7 pt-6 pb-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Teaching</div>
-                <a href="#" class="sidebar-item group flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                <a href="{{ route('teacher.students.index') }}" 
+                   class="sidebar-item group flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest {{ request()->routeIs('teacher.students.*') ? 'active' : 'text-gray-400' }}">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
                     Students
                 </a>
             @endif
 
             <div class="px-7 pt-6 pb-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Projects</div>
+            @if(auth()->user()->role === \App\Enums\UserRole::TEACHER)
+                <a href="{{ route('projects.create') }}" 
+                   class="sidebar-item group flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest {{ request()->routeIs('projects.create') ? 'active' : 'text-gray-400' }}">
+                    <svg class="w-4 h-4 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New Project
+                </a>
+            @endif
+
             @foreach(auth()->user()->projects as $project)
                 <a href="{{ route('projects.show', $project->id) }}" 
-                   class="sidebar-item group flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest {{ request()->is('projects/'.$project->id.'*') ? 'active' : 'text-gray-400' }}">
+                   class="sidebar-item group flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest {{ request()->is('projects/'.$project->id) ? 'active' : 'text-gray-400' }}">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
                     {{ Str::limit($project->name, 16) }}
                 </a>

@@ -50,8 +50,7 @@
                             <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Current Status</label>
                             <select name="status" class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3.5 text-sm font-medium focus:bg-white focus:border-indigo-500 transition-all outline-none appearance-none">
                                 @foreach(\App\Enums\TaskStatus::cases() as $status)
-                                    @php $isActive = ($taskProgress->status instanceof \UnitEnum ? $taskProgress->status->value : $taskProgress->status) === $status->value; @endphp
-                                    <option value="{{ $status->value }}" {{ $isActive ? 'selected' : '' }}>
+                                    <option value="{{ $status->value }}" {{ $taskProgress->status === $status ? 'selected' : '' }}>
                                         {{ ucfirst(str_replace('_', ' ', $status->value)) }}
                                     </option>
                                 @endforeach

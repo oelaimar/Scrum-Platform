@@ -26,39 +26,7 @@
     </div>
 </div>
 
-{{-- Invite form --}}
-<div class="bg-white rounded-3xl border border-gray-100 shadow-sm mb-8 overflow-hidden">
-    <div class="px-8 py-5 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
-        <div>
-            <h3 class="text-sm font-black text-gray-900 tracking-tight">Invite Student</h3>
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Generate secure invitation link</p>
-        </div>
-    </div>
-    <div class="p-8">
-        <form action="{{ route('teacher.invite.store') }}" method="POST" class="flex flex-wrap items-end gap-6">
-            @csrf
-            <div class="flex-1 min-w-[240px]">
-                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Student Email</label>
-                <input type="email" name="email" required value="{{ old('email') }}" placeholder="student@school.com"
-                       class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium focus:bg-white focus:border-indigo-500 transition-all outline-none">
-                @error('email') <p class="text-xs text-red-500 mt-1.5 ml-1">{{ $message }}</p> @enderror
-            </div>
-            <div class="flex-1 min-w-[240px]">
-                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Target Project</label>
-                <select name="project_id" required class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-medium focus:bg-white focus:border-indigo-500 transition-all outline-none appearance-none">
-                    <option value="">Select Project</option>
-                    @foreach($projects as $project)
-                        <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>{{ $project->name }}</option>
-                    @endforeach
-                </select>
-                @error('project_id') <p class="text-xs text-red-500 mt-1.5 ml-1">{{ $message }}</p> @enderror
-            </div>
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-8 rounded-2xl shadow-lg shadow-indigo-100 transition-all active:scale-95 uppercase tracking-widest text-[10px]">
-                Send Invitation
-            </button>
-        </form>
-    </div>
-</div>
+{{-- Invitation form removed in favor of direct management on Project Show page --}}
 
 <div class="grid grid-cols-3 gap-8">
     {{-- Projects list --}}
@@ -78,7 +46,6 @@
                 <div class="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between text-[10px] font-black text-gray-400 uppercase tracking-widest">
                     <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> {{ $project->sprints->count() }} Sprints</span>
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('teacher.projects.invites', $project->id) }}" class="hover:text-indigo-600 transition-colors">Manage Invites</a>
                         <span class="text-indigo-500 flex items-center gap-1">Manage Project <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
                     </div>
                 </div>

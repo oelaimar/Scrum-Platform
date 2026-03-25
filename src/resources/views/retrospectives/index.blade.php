@@ -37,15 +37,15 @@
                     <div class="space-y-4">
                         <div>
                             <p class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Positives</p>
-                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->positives }}"</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->what_went_well }}"</p>
                         </div>
                         <div>
                             <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Difficulties</p>
-                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->difficulties }}"</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->what_needs_improvement }}"</p>
                         </div>
                         <div>
                             <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">Improvements</p>
-                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->improvements }}"</p>
+                            <p class="text-xs font-semibold text-gray-600 leading-relaxed italic">"{{ $retro->action_items }}"</p>
                         </div>
                     </div>
                 </div>
